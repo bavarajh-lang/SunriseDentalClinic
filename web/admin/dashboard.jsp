@@ -1,11 +1,4 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%
-    if (session.getAttribute("user") == null ||
-        !"ADMIN".equals(session.getAttribute("role"))) {
-        response.sendRedirect("../login.jsp");
-        return;
-    }
-%>
 
 <!DOCTYPE html>
 <html>
@@ -171,7 +164,9 @@
 
         <nav class="menu">
             <a class="active" href="dashboard.jsp">Dashboard</a>
-            <a href="manage-dentists.jsp">Manage Dentists</a>
+            <a href="<%= request.getContextPath() %>/admin/ManageDentists">
+    Manage Dentists
+</a>
             <a href="manage-assistants.jsp">Manage Assistants</a>
             <a href="manage-cashiers.jsp">Manage Cashiers</a>
             <a href="patients.jsp">Patients</a>
@@ -191,8 +186,10 @@
                 Welcome, <%= session.getAttribute("fullName") %>
             </strong>
 
-            <a href="../LogoutServlet" class="logout">Logout</a>
-
+<a href="<%= request.getContextPath() %>/LogoutServlet"
+   class="logout">
+    Logout
+</a>
         </div>
 
         <div class="content">
@@ -230,7 +227,8 @@
 
                 <div class="actions">
 
-                    <a href="manage-dentists.jsp" class="action">
+                   <a href="<%= request.getContextPath() %>/admin/ManageDentists"
+   class="action-card">
                         <h3>Manage Dentists</h3>
                         <p>Add, edit or disable dentists.</p>
                     </a>

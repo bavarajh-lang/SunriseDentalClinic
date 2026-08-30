@@ -1,11 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%
-    if (session.getAttribute("user") == null ||
-        !"CASHIER".equals(session.getAttribute("role"))) {
-        response.sendRedirect("../login.jsp");
-        return;
-    }
-%>
+
 
 <!DOCTYPE html>
 <html>
@@ -175,7 +169,10 @@
                 Welcome, <%= session.getAttribute("fullName") %>
             </strong>
 
-            <a href="../LogoutServlet" class="logout">Logout</a>
+           <a href="<%= request.getContextPath() %>/LogoutServlet"
+   class="logout">
+    Logout
+</a>
 
         </div>
 

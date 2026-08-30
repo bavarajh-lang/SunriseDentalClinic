@@ -1,11 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%
-    if (session.getAttribute("user") == null ||
-        !"ASSISTANT".equals(session.getAttribute("role"))) {
-        response.sendRedirect("../login.jsp");
-        return;
-    }
-%>
+
 
 <!DOCTYPE html>
 <html>
@@ -159,8 +153,12 @@
 
         <nav class="menu">
             <a class="active" href="dashboard.jsp">Dashboard</a>
-            <a href="pending-appointments.jsp">Pending Appointments</a>
-            <a href="confirmed-appointments.jsp">Confirmed Appointments</a>
+            <a href="<%= request.getContextPath() %>/assistant/PendingAppointments">
+    Pending Appointments
+</a>
+            <a href="<%= request.getContextPath() %>/assistant/ConfirmedAppointments">
+    Confirmed Appointments
+</a>
             <a href="treatment-records.jsp">Treatment Records</a>
             <a href="create-bill.jsp">Create Bill</a>
             <a href="patient-history.jsp">Patient History</a>
@@ -177,8 +175,10 @@
                 Welcome, <%= session.getAttribute("fullName") %>
             </strong>
 
-            <a href="../LogoutServlet" class="logout">Logout</a>
-
+<a href="<%= request.getContextPath() %>/LogoutServlet"
+   class="logout">
+    Logout
+</a>
         </div>
 
         <div class="content">
@@ -221,10 +221,17 @@
 
                 <div class="actions">
 
-                    <a href="pending-appointments.jsp" class="action">
-                        <h3>Pending Appointments</h3>
-                        <p>Check requested dates and dentist availability.</p>
-                    </a>
+                    <a href="<%= request.getContextPath() %>/assistant/PendingAppointments"
+   class="action-card">
+
+    <h3>Pending Appointments</h3>
+
+    <p>
+        Review and manage appointment requests
+        for your assigned dentist.
+    </p>
+
+</a>
 
                     <a href="confirmed-appointments.jsp" class="action">
                         <h3>Confirmed Appointments</h3>

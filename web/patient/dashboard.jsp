@@ -1,18 +1,4 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%
-    if (session.getAttribute("user") == null) {
-        response.sendRedirect("../login.jsp");
-        return;
-    }
-
-    String role = (String) session.getAttribute("role");
-
-    if (!"PATIENT".equals(role)) {
-        response.sendRedirect("../login.jsp");
-        return;
-    }
-%>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -234,8 +220,12 @@
 
         <nav class="menu">
             <a href="dashboard.jsp" class="active">Dashboard</a>
-            <a href="book-appointment.jsp">Book Appointment</a>
-            <a href="my-appointments.jsp">My Appointments</a>
+            <a href="<%= request.getContextPath() %>/BookAppointment">
+        Book Appointment
+    </a>
+            <a href="<%= request.getContextPath() %>/patient/MyAppointments">
+    My Appointments
+</a>
             <a href="treatment-history.jsp">Treatment History</a>
             <a href="my-bills.jsp">My Bills</a>
             <a href="notifications.jsp">Notifications</a>
@@ -253,9 +243,10 @@
                 <%= session.getAttribute("fullName") %>
             </div>
 
-            <a href="../LogoutServlet" class="logout">
-                Logout
-            </a>
+            <a href="<%= request.getContextPath() %>/LogoutServlet"
+   class="logout">
+    Logout
+</a>
 
         </div>
 
@@ -296,15 +287,22 @@
 
                 <div class="action-grid">
 
-                    <a href="book-appointment.jsp" class="action-card">
+                   <a href="<%= request.getContextPath() %>/BookAppointment"
+   class="action-card">
                         <h3>Book Appointment</h3>
                         <p>Select a dental service, dentist, date and time.</p>
                     </a>
 
-                    <a href="my-appointments.jsp" class="action-card">
-                        <h3>My Appointments</h3>
-                        <p>Check pending, confirmed and previous appointments.</p>
-                    </a>
+                   <a href="<%= request.getContextPath() %>/patient/MyAppointments"
+   class="action-card">
+
+    <h3>My Appointments</h3>
+
+    <p>
+        Check pending, confirmed and previous appointments.
+    </p>
+
+</a>
 
                     <a href="my-bills.jsp" class="action-card">
                         <h3>My Bills</h3>
