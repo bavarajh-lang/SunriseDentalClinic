@@ -159,7 +159,9 @@
             <a href="<%= request.getContextPath() %>/assistant/ConfirmedAppointments">
     Confirmed Appointments
 </a>
-            <a href="treatment-records.jsp">Treatment Records</a>
+            <a href="<%= request.getContextPath() %>/assistant/TreatmentRecords">
+    Treatment Records
+</a>
             <a href="create-bill.jsp">Create Bill</a>
             <a href="patient-history.jsp">Patient History</a>
             <a href="notifications.jsp">Notifications</a>

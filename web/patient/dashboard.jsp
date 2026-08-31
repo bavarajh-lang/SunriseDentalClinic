@@ -221,11 +221,11 @@
         <nav class="menu">
             <a href="dashboard.jsp" class="active">Dashboard</a>
             <a href="<%= request.getContextPath() %>/BookAppointment">
-        Book Appointment
-    </a>
+            Book Appointment
+            </a>
             <a href="<%= request.getContextPath() %>/patient/MyAppointments">
-    My Appointments
-</a>
+            My Appointments
+            </a>
             <a href="treatment-history.jsp">Treatment History</a>
             <a href="my-bills.jsp">My Bills</a>
             <a href="notifications.jsp">Notifications</a>
@@ -288,13 +288,13 @@
                 <div class="action-grid">
 
                    <a href="<%= request.getContextPath() %>/BookAppointment"
-   class="action-card">
+                   class="action-card">
                         <h3>Book Appointment</h3>
                         <p>Select a dental service, dentist, date and time.</p>
                     </a>
 
                    <a href="<%= request.getContextPath() %>/patient/MyAppointments"
-   class="action-card">
+                        class="action-card">
 
     <h3>My Appointments</h3>
 

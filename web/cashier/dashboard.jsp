@@ -153,7 +153,9 @@
 
         <nav class="menu">
             <a class="active" href="dashboard.jsp">Dashboard</a>
-            <a href="pending-bills.jsp">Pending Bills</a>
+           <a href="<%= request.getContextPath() %>/cashier/PendingBills">
+    Pending Bills
+</a>
             <a href="payments.jsp">Payments</a>
             <a href="receipts.jsp">Receipts</a>
             <a href="daily-summary.jsp">Daily Summary</a>

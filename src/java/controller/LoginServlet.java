@@ -42,12 +42,14 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
-        UserDAO userDAO = new UserDAO();
+        UserDAO userDAO =
+                new UserDAO();
 
-        User user = userDAO.login(
-                usernameOrEmail.trim(),
-                password
-        );
+        User user =
+                userDAO.login(
+                        usernameOrEmail.trim(),
+                        password
+                );
 
         if (user == null) {
 
@@ -62,10 +64,35 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
+        if (user.getRole() == null
+                || user.getRole().trim().isEmpty()) {
+
+            request.setAttribute(
+                    "errorMessage",
+                    "Your account role is not available."
+            );
+
+            request.getRequestDispatcher("/login.jsp")
+                    .forward(request, response);
+
+            return;
+        }
+
+        HttpSession oldSession =
+                request.getSession(false);
+
+        if (oldSession != null) {
+            oldSession.invalidate();
+        }
+
         HttpSession session =
                 request.getSession(true);
 
-        session.setAttribute("user", user);
+        session.setAttribute(
+                "user",
+                user
+        );
+
         session.setAttribute(
                 "userId",
                 user.getUserId()
@@ -81,7 +108,9 @@ public class LoginServlet extends HttpServlet {
                 user.getRole()
         );
 
-        session.setMaxInactiveInterval(30 * 60);
+        session.setMaxInactiveInterval(
+                30 * 60
+        );
 
         String contextPath =
                 request.getContextPath();
@@ -89,27 +118,39 @@ public class LoginServlet extends HttpServlet {
         switch (user.getRole()) {
 
             case "ADMIN":
+
                 response.sendRedirect(
-                        contextPath + "/admin/dashboard.jsp"
+                        contextPath
+                        + "/admin/Dashboard"
                 );
+
                 break;
 
             case "PATIENT":
+
                 response.sendRedirect(
-                        contextPath + "/patient/dashboard.jsp"
+                        contextPath
+                        + "/patient/dashboard.jsp"
                 );
+
                 break;
 
             case "ASSISTANT":
+
                 response.sendRedirect(
-                        contextPath + "/assistant/dashboard.jsp"
+                        contextPath
+                        + "/assistant/dashboard.jsp"
                 );
+
                 break;
 
             case "CASHIER":
+
                 response.sendRedirect(
-                        contextPath + "/cashier/dashboard.jsp"
+                        contextPath
+                        + "/cashier/dashboard.jsp"
                 );
+
                 break;
 
             default:
@@ -121,8 +162,12 @@ public class LoginServlet extends HttpServlet {
                         "Your account role is not supported."
                 );
 
-                request.getRequestDispatcher("/login.jsp")
-                        .forward(request, response);
+                request.getRequestDispatcher(
+                        "/login.jsp"
+                ).forward(
+                        request,
+                        response
+                );
 
                 break;
         }
