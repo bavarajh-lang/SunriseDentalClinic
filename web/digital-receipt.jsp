@@ -26,8 +26,7 @@
     String encodedQrToken = "";
 
     if (bill != null
-            && bill.getQrToken() != null
-            && !bill.getQrToken().trim().isEmpty()) {
+            && bill.getQrToken() != null) {
 
         encodedQrToken =
                 URLEncoder.encode(
@@ -467,7 +466,7 @@
         }
 
         .qr-section {
-            margin-top: 30px;
+            margin-top: 28px;
             display: flex;
             justify-content: center;
         }
@@ -478,41 +477,40 @@
             text-align: center;
             background: #f8fafc;
             border: 1px dashed #94a3b8;
-            border-radius: 12px;
-            padding: 25px;
+            border-radius: 10px;
+            padding: 22px;
         }
 
-        .qr-wrapper {
+        .qr-image-wrapper {
             width: 220px;
             height: 220px;
             margin: 0 auto 16px;
+            padding: 10px;
             background: white;
-            border: 1px solid #dbe4ea;
+            border: 1px solid #d1d5db;
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 9px;
         }
 
         .qr-image {
+            display: block;
             width: 200px;
             height: 200px;
-            display: block;
+            max-width: 100%;
+            object-fit: contain;
         }
 
         .qr-card h3 {
             color: #0f5f87;
-            margin-bottom: 8px;
-            font-size: 18px;
+            margin-bottom: 7px;
         }
 
         .qr-card p {
             color: #64748b;
             font-size: 12px;
             line-height: 1.6;
-            max-width: 400px;
-            margin: auto;
         }
 
         .secure-label {
@@ -532,21 +530,14 @@
             background: #0f5f87;
             color: white;
             text-decoration: none;
+            padding: 9px 14px;
             border-radius: 7px;
-            padding: 10px 15px;
             font-size: 12px;
             font-weight: bold;
         }
 
         .open-digital-receipt:hover {
             background: #0b4f71;
-        }
-
-        .qr-unavailable {
-            color: #b91c1c;
-            font-size: 13px;
-            font-weight: bold;
-            padding: 20px;
         }
 
         .receipt-footer {
@@ -625,6 +616,19 @@
             }
         }
 
+        @media(max-width: 400px) {
+
+            .qr-image-wrapper {
+                width: 190px;
+                height: 190px;
+            }
+
+            .qr-image {
+                width: 170px;
+                height: 170px;
+            }
+        }
+
         @media print {
 
             body {
@@ -670,13 +674,8 @@
                 border-bottom: 2px solid #0f5f87;
             }
 
-            .qr-wrapper {
-                page-break-inside: avoid;
-            }
-
-            .qr-image {
-                width: 180px;
-                height: 180px;
+            .qr-image-wrapper {
+                border: none;
             }
         }
 
@@ -696,7 +695,7 @@
 
         <nav class="menu">
 
-            <a href="<%= request.getContextPath() %>/cashier/Dashboard">
+            <a href="<%= request.getContextPath() %>/cashier/dashboard.jsp">
                 Dashboard
             </a>
 
@@ -704,9 +703,13 @@
                 Pending Bills
             </a>
 
-            <a href="<%= request.getContextPath() %>/cashier/PaymentHistory"
-               class="active">
+            <a href="<%= request.getContextPath() %>/cashier/payment-history.jsp">
                 Payment History
+            </a>
+
+            <a href="<%= request.getContextPath() %>/cashier/receipts.jsp"
+               class="active">
+                Receipts
             </a>
 
         </nav>
@@ -744,17 +747,18 @@
                     </h1>
 
                     <p>
-                        Review, print or provide the secure digital receipt.
+                        Review, print and provide the digital
+                        QR receipt to the patient.
                     </p>
 
                 </div>
 
                 <div class="header-actions">
 
-                    <a href="<%= request.getContextPath() %>/cashier/PaymentHistory"
+                    <a href="<%= request.getContextPath() %>/cashier/PendingBills"
                        class="btn btn-secondary">
 
-                        Payment History
+                        Pending Bills
 
                     </a>
 
@@ -822,7 +826,9 @@
                         </h3>
 
                         <div class="receipt-number">
+
                             <%= bill.getBillNo() %>
+
                         </div>
 
                         <span class="paid-status">
@@ -939,7 +945,10 @@
                                 </span>
 
                                 <span class="info-value">
-                                    Dr. <%= bill.getDentistName() %>
+
+                                    Dr.
+                                    <%= bill.getDentistName() %>
+
                                 </span>
 
                             </div>
@@ -1004,7 +1013,8 @@
 
                                 <span class="info-value">
 
-                                    PAY-<%= String.format(
+                                    PAY-
+                                    <%= String.format(
                                             "%06d",
                                             payment.getPaymentId()
                                     ) %>
@@ -1077,11 +1087,25 @@
 
                                 <tr>
 
-                                    <th>Item</th>
-                                    <th>Description</th>
-                                    <th>Qty</th>
-                                    <th>Unit Price</th>
-                                    <th>Amount</th>
+                                    <th>
+                                        Item
+                                    </th>
+
+                                    <th>
+                                        Description
+                                    </th>
+
+                                    <th>
+                                        Qty
+                                    </th>
+
+                                    <th>
+                                        Unit Price
+                                    </th>
+
+                                    <th>
+                                        Amount
+                                    </th>
 
                                 </tr>
 
@@ -1098,7 +1122,9 @@
                                     <td>
 
                                         <div class="item-name">
+
                                             <%= item.getItemName() %>
+
                                         </div>
 
                                     </td>
@@ -1113,7 +1139,9 @@
                                         %>
 
                                         <div class="item-description">
+
                                             <%= item.getDescription() %>
+
                                         </div>
 
                                         <%
@@ -1241,7 +1269,8 @@
 
                                 <strong>
 
-                                    PAY-<%= String.format(
+                                    PAY-
+                                    <%= String.format(
                                             "%06d",
                                             payment.getPaymentId()
                                     ) %>
@@ -1337,31 +1366,28 @@
 
                         <div class="qr-card">
 
-                            <%
-                                if (!encodedQrToken.isEmpty()) {
-                            %>
-
-                            <div class="qr-wrapper">
+                            <div class="qr-image-wrapper">
 
                                 <img
                                     src="<%= request.getContextPath() %>/ReceiptQR?token=<%= encodedQrToken %>"
                                     alt="Digital Receipt QR Code"
-                                    class="qr-image">
+                                    class="qr-image"
+                                >
 
                             </div>
 
                             <h3>
-                                Secure Digital Receipt
+                                Digital QR Receipt
                             </h3>
 
                             <p>
-                                Scan this QR code using a mobile device
-                                to open and verify the patient's digital
+                                Ask the patient to scan this QR code
+                                to open and verify the secure digital
                                 payment receipt.
                             </p>
 
                             <span class="secure-label">
-                                VERIFIED SECURE QR RECEIPT
+                                VERIFIED SECURE RECEIPT
                             </span>
 
                             <br>
@@ -1375,21 +1401,6 @@
                                 Open Digital Receipt
 
                             </a>
-
-                            <%
-                                } else {
-                            %>
-
-                            <div class="qr-unavailable">
-
-                                QR receipt token is not available
-                                for this bill.
-
-                            </div>
-
-                            <%
-                                }
-                            %>
 
                         </div>
 
@@ -1421,10 +1432,10 @@
                     The payment receipt could not be loaded.
                 </p>
 
-                <a href="<%= request.getContextPath() %>/cashier/PaymentHistory"
+                <a href="<%= request.getContextPath() %>/cashier/PendingBills"
                    class="btn btn-primary">
 
-                    Return to Payment History
+                    Return to Pending Bills
 
                 </a>
 

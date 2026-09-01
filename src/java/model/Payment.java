@@ -17,11 +17,20 @@ public class Payment {
 
     private Timestamp paidAt;
 
+    private String billNo;
+    private String appointmentNo;
+    private String patientNo;
+    private String patientName;
+    private String cashierName;
+
 
     public Payment() {
 
-        this.amount = BigDecimal.ZERO;
-        this.status = "SUCCESS";
+        this.amount =
+                BigDecimal.ZERO;
+
+        this.status =
+                "SUCCESS";
     }
 
 
@@ -31,17 +40,25 @@ public class Payment {
                    String method,
                    String reference) {
 
-        this.billId = billId;
-        this.cashierUserId = cashierUserId;
+        this.billId =
+                billId;
+
+        this.cashierUserId =
+                cashierUserId;
 
         this.amount =
                 amount != null
                 ? amount
                 : BigDecimal.ZERO;
 
-        this.method = method;
-        this.reference = reference;
-        this.status = "SUCCESS";
+        this.method =
+                method;
+
+        this.reference =
+                reference;
+
+        this.status =
+                "SUCCESS";
     }
 
 
@@ -49,8 +66,11 @@ public class Payment {
         return paymentId;
     }
 
-    public void setPaymentId(int paymentId) {
-        this.paymentId = paymentId;
+    public void setPaymentId(
+            int paymentId) {
+
+        this.paymentId =
+                paymentId;
     }
 
 
@@ -58,8 +78,11 @@ public class Payment {
         return billId;
     }
 
-    public void setBillId(int billId) {
-        this.billId = billId;
+    public void setBillId(
+            int billId) {
+
+        this.billId =
+                billId;
     }
 
 
@@ -67,8 +90,11 @@ public class Payment {
         return cashierUserId;
     }
 
-    public void setCashierUserId(int cashierUserId) {
-        this.cashierUserId = cashierUserId;
+    public void setCashierUserId(
+            int cashierUserId) {
+
+        this.cashierUserId =
+                cashierUserId;
     }
 
 
@@ -76,7 +102,8 @@ public class Payment {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
+    public void setAmount(
+            BigDecimal amount) {
 
         this.amount =
                 amount != null
@@ -89,8 +116,11 @@ public class Payment {
         return method;
     }
 
-    public void setMethod(String method) {
-        this.method = method;
+    public void setMethod(
+            String method) {
+
+        this.method =
+                method;
     }
 
 
@@ -98,8 +128,11 @@ public class Payment {
         return reference;
     }
 
-    public void setReference(String reference) {
-        this.reference = reference;
+    public void setReference(
+            String reference) {
+
+        this.reference =
+                reference;
     }
 
 
@@ -107,8 +140,11 @@ public class Payment {
         return status;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStatus(
+            String status) {
+
+        this.status =
+                status;
     }
 
 
@@ -116,7 +152,70 @@ public class Payment {
         return paidAt;
     }
 
-    public void setPaidAt(Timestamp paidAt) {
-        this.paidAt = paidAt;
+    public void setPaidAt(
+            Timestamp paidAt) {
+
+        this.paidAt =
+                paidAt;
+    }
+
+
+    public String getBillNo() {
+        return billNo;
+    }
+
+    public void setBillNo(
+            String billNo) {
+
+        this.billNo =
+                billNo;
+    }
+
+
+    public String getAppointmentNo() {
+        return appointmentNo;
+    }
+
+    public void setAppointmentNo(
+            String appointmentNo) {
+
+        this.appointmentNo =
+                appointmentNo;
+    }
+
+
+    public String getPatientNo() {
+        return patientNo;
+    }
+
+    public void setPatientNo(
+            String patientNo) {
+
+        this.patientNo =
+                patientNo;
+    }
+
+
+    public String getPatientName() {
+        return patientName;
+    }
+
+    public void setPatientName(
+            String patientName) {
+
+        this.patientName =
+                patientName;
+    }
+
+
+    public String getCashierName() {
+        return cashierName;
+    }
+
+    public void setCashierName(
+            String cashierName) {
+
+        this.cashierName =
+                cashierName;
     }
 }

@@ -11,6 +11,9 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Timestamp;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PaymentDAO {
 
     public Payment processPayment(
@@ -160,7 +163,7 @@ public class PaymentDAO {
                     "SELECT payment_id " +
                     "FROM payments " +
                     "WHERE bill_id = ? " +
-                    "AND status = 'SUCCESS' " +
+                    "AND payment_status = 'SUCCESS' " +
                     "LIMIT 1";
 
             try (
@@ -192,7 +195,8 @@ public class PaymentDAO {
             String paymentSql =
                     "INSERT INTO payments " +
                     "(bill_id, cashier_user_id, amount, " +
-                    "method, reference, status, paid_at) " +
+                    "payment_method, payment_reference, " +
+                    "payment_status, paid_at) " +
                     "VALUES (?, ?, ?, ?, ?, 'SUCCESS', CURRENT_TIMESTAMP)";
 
             int paymentId;
@@ -373,6 +377,76 @@ public class PaymentDAO {
     }
 
 
+    public List<Payment> getSuccessfulPayments() {
+
+        List<Payment> payments =
+                new ArrayList<>();
+
+        String sql =
+                "SELECT " +
+                "pay.payment_id, " +
+                "pay.bill_id, " +
+                "pay.cashier_user_id, " +
+                "pay.amount, " +
+                "pay.payment_method, " +
+                "pay.payment_reference, " +
+                "pay.payment_status, " +
+                "pay.paid_at, " +
+                "b.bill_no, " +
+                "a.appointment_no, " +
+                "p.patient_no, " +
+                "pu.full_name AS patient_name, " +
+                "cu.full_name AS cashier_name " +
+                "FROM payments pay " +
+                "INNER JOIN bills b " +
+                "ON pay.bill_id = b.bill_id " +
+                "INNER JOIN appointments a " +
+                "ON b.appointment_id = a.appointment_id " +
+                "INNER JOIN patients p " +
+                "ON b.patient_id = p.patient_id " +
+                "INNER JOIN users pu " +
+                "ON p.user_id = pu.user_id " +
+                "INNER JOIN users cu " +
+                "ON pay.cashier_user_id = cu.user_id " +
+                "WHERE pay.payment_status = 'SUCCESS' " +
+                "ORDER BY pay.paid_at DESC, " +
+                "pay.payment_id DESC";
+
+        try (
+            Connection connection =
+                    DBConnection.getInstance()
+                            .getConnection();
+
+            PreparedStatement statement =
+                    connection.prepareStatement(
+                            sql
+                    );
+
+            ResultSet resultSet =
+                    statement.executeQuery()
+        ) {
+
+            while (resultSet.next()) {
+
+                Payment payment =
+                        mapPaymentHistory(
+                                resultSet
+                        );
+
+                payments.add(
+                        payment
+                );
+            }
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+
+        return payments;
+    }
+
+
     public Payment getSuccessfulPaymentByBillId(
             int billId) {
 
@@ -387,13 +461,13 @@ public class PaymentDAO {
                 "bill_id, " +
                 "cashier_user_id, " +
                 "amount, " +
-                "method, " +
-                "reference, " +
-                "status, " +
+                "payment_method, " +
+                "payment_reference, " +
+                "payment_status, " +
                 "paid_at " +
                 "FROM payments " +
                 "WHERE bill_id = ? " +
-                "AND status = 'SUCCESS' " +
+                "AND payment_status = 'SUCCESS' " +
                 "ORDER BY paid_at DESC, payment_id DESC " +
                 "LIMIT 1";
 
@@ -451,9 +525,9 @@ public class PaymentDAO {
                 "bill_id, " +
                 "cashier_user_id, " +
                 "amount, " +
-                "method, " +
-                "reference, " +
-                "status, " +
+                "payment_method, " +
+                "payment_reference, " +
+                "payment_status, " +
                 "paid_at " +
                 "FROM payments " +
                 "WHERE payment_id = ?";
@@ -531,25 +605,68 @@ public class PaymentDAO {
 
         payment.setMethod(
                 resultSet.getString(
-                        "method"
+                        "payment_method"
                 )
         );
 
         payment.setReference(
                 resultSet.getString(
-                        "reference"
+                        "payment_reference"
                 )
         );
 
         payment.setStatus(
                 resultSet.getString(
-                        "status"
+                        "payment_status"
                 )
         );
 
         payment.setPaidAt(
                 resultSet.getTimestamp(
                         "paid_at"
+                )
+        );
+
+        return payment;
+    }
+
+
+    private Payment mapPaymentHistory(
+            ResultSet resultSet)
+            throws Exception {
+
+        Payment payment =
+                mapPayment(
+                        resultSet
+                );
+
+        payment.setBillNo(
+                resultSet.getString(
+                        "bill_no"
+                )
+        );
+
+        payment.setAppointmentNo(
+                resultSet.getString(
+                        "appointment_no"
+                )
+        );
+
+        payment.setPatientNo(
+                resultSet.getString(
+                        "patient_no"
+                )
+        );
+
+        payment.setPatientName(
+                resultSet.getString(
+                        "patient_name"
+                )
+        );
+
+        payment.setCashierName(
+                resultSet.getString(
+                        "cashier_name"
                 )
         );
 

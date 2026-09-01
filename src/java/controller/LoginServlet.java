@@ -36,8 +36,12 @@ public class LoginServlet extends HttpServlet {
                     "Please enter your username/email and password."
             );
 
-            request.getRequestDispatcher("/login.jsp")
-                    .forward(request, response);
+            request.getRequestDispatcher(
+                    "/login.jsp"
+            ).forward(
+                    request,
+                    response
+            );
 
             return;
         }
@@ -58,8 +62,12 @@ public class LoginServlet extends HttpServlet {
                     "Invalid login details or inactive account."
             );
 
-            request.getRequestDispatcher("/login.jsp")
-                    .forward(request, response);
+            request.getRequestDispatcher(
+                    "/login.jsp"
+            ).forward(
+                    request,
+                    response
+            );
 
             return;
         }
@@ -72,8 +80,12 @@ public class LoginServlet extends HttpServlet {
                     "Your account role is not available."
             );
 
-            request.getRequestDispatcher("/login.jsp")
-                    .forward(request, response);
+            request.getRequestDispatcher(
+                    "/login.jsp"
+            ).forward(
+                    request,
+                    response
+            );
 
             return;
         }
@@ -82,6 +94,7 @@ public class LoginServlet extends HttpServlet {
                 request.getSession(false);
 
         if (oldSession != null) {
+
             oldSession.invalidate();
         }
 
@@ -148,7 +161,7 @@ public class LoginServlet extends HttpServlet {
 
                 response.sendRedirect(
                         contextPath
-                        + "/cashier/dashboard.jsp"
+                        + "/cashier/Dashboard"
                 );
 
                 break;

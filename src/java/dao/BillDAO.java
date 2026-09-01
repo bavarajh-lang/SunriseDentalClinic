@@ -641,6 +641,11 @@ public class BillDAO {
     public Bill getBillByAppointmentId(
             int appointmentId) {
 
+        if (appointmentId <= 0) {
+
+            return null;
+        }
+
         try (
             Connection connection =
                     DBConnection.getInstance()
@@ -651,6 +656,76 @@ public class BillDAO {
                     connection,
                     appointmentId
             );
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
+    public Bill getPaidBillByQrToken(
+            String qrToken) {
+
+        String cleanToken =
+                cleanValue(
+                        qrToken
+                );
+
+        if (cleanToken == null
+                || cleanToken.length() > 100) {
+
+            return null;
+        }
+
+        String sql =
+                getBillSelectSql()
+                + "WHERE b.qr_token = ? "
+                + "AND b.payment_status = 'PAID' "
+                + "LIMIT 1";
+
+        try (
+            Connection connection =
+                    DBConnection.getInstance()
+                            .getConnection();
+
+            PreparedStatement statement =
+                    connection.prepareStatement(
+                            sql
+                    )
+        ) {
+
+            statement.setString(
+                    1,
+                    cleanToken
+            );
+
+            try (
+                ResultSet resultSet =
+                        statement.executeQuery()
+            ) {
+
+                if (!resultSet.next()) {
+
+                    return null;
+                }
+
+                Bill bill =
+                        mapBill(
+                                resultSet
+                        );
+
+                bill.setBillItems(
+                        getBillItems(
+                                connection,
+                                bill.getBillId()
+                        )
+                );
+
+                return bill;
+            }
 
         } catch (Exception e) {
 
