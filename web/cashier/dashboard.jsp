@@ -220,7 +220,7 @@
 
         .actions {
             display: grid;
-            grid-template-columns: repeat(4,1fr);
+            grid-template-columns: repeat(5,1fr);
             gap: 15px;
         }
 
@@ -270,6 +270,13 @@
             color: #4b5563;
             font-size: 13px;
             line-height: 1.6;
+        }
+
+        @media(max-width: 1300px) {
+
+            .actions {
+                grid-template-columns: repeat(3,1fr);
+            }
         }
 
         @media(max-width: 1150px) {
@@ -336,6 +343,10 @@
                 Daily Summary
             </a>
 
+            <a href="<%= request.getContextPath() %>/AppointmentSearch">
+                Appointment Search
+            </a>
+
         </nav>
 
     </aside>
@@ -370,7 +381,7 @@
 
                 <p>
                     Manage patient bills, payments,
-                    receipts and daily collections.
+                    receipts, daily collections and appointment searches.
                 </p>
 
             </div>
@@ -527,17 +538,34 @@
 
                     </a>
 
+                    <a href="<%= request.getContextPath() %>/AppointmentSearch"
+                       class="action">
+
+                        <h3>
+                            Appointment Search
+                        </h3>
+
+                        <p>
+                            Search by appointment number and view
+                            patient, dentist, service and schedule details.
+                        </p>
+
+                    </a>
+
                 </div>
 
                 <div class="workflow-box">
 
                     <h3>
-                        Cashier Payment Workflow
+                        Cashier Workflow
                     </h3>
 
                     <p>
-                        Pending Bills → select bill →
-                        process payment → payment history →
+                        Search an appointment when required →
+                        review pending bills →
+                        select a bill →
+                        process payment →
+                        open payment history →
                         view or print receipt →
                         provide secure QR digital receipt →
                         review Daily Summary.

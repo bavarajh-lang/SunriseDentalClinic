@@ -94,6 +94,14 @@
         .logo {
             font-size: 22px;
             font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .role-label {
+            color: #d6edf7;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
             margin-bottom: 35px;
         }
 
@@ -218,7 +226,7 @@
 
         .actions {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 15px;
         }
 
@@ -248,6 +256,33 @@
             font-size: 13px;
             color: #6b7280;
             line-height: 1.5;
+        }
+
+        .workflow-box {
+            margin-top: 25px;
+            background: #eef7fb;
+            border-left: 4px solid #0f5f87;
+            padding: 18px;
+            border-radius: 8px;
+        }
+
+        .workflow-box h3 {
+            color: #0f5f87;
+            font-size: 15px;
+            margin-bottom: 7px;
+        }
+
+        .workflow-box p {
+            color: #4b5563;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        @media(max-width: 1200px) {
+
+            .actions {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
 
         @media(max-width: 1100px) {
@@ -295,6 +330,10 @@
             Sunrise Dental
         </div>
 
+        <div class="role-label">
+            ADMINISTRATION
+        </div>
+
         <nav class="menu">
 
             <a class="active"
@@ -312,6 +351,10 @@
 
             <a href="<%= request.getContextPath() %>/admin/ManageCashiers">
                 Manage Cashiers
+            </a>
+
+            <a href="<%= request.getContextPath() %>/AppointmentSearch">
+                Appointment Search
             </a>
 
             <a href="<%= request.getContextPath() %>/admin/patients.jsp">
@@ -367,7 +410,8 @@
                 </h1>
 
                 <p>
-                    Manage clinic users, staff, appointments and reports.
+                    Manage clinic users, staff, appointments,
+                    appointment searches and reports.
                 </p>
 
             </div>
@@ -476,7 +520,8 @@
                         </h3>
 
                         <p>
-                            Create assistants and assign them to dentists.
+                            Create assistants and assign them
+                            to dentists.
                         </p>
 
                     </a>
@@ -490,6 +535,21 @@
 
                         <p>
                             Add or replace the active cashier.
+                        </p>
+
+                    </a>
+
+                    <a href="<%= request.getContextPath() %>/AppointmentSearch"
+                       class="action">
+
+                        <h3>
+                            Appointment Search
+                        </h3>
+
+                        <p>
+                            Search by appointment number and
+                            view patient, dentist, service,
+                            schedule and appointment status.
                         </p>
 
                     </a>
@@ -515,7 +575,8 @@
                         </h3>
 
                         <p>
-                            View clinic performance and revenue reports.
+                            View clinic performance and
+                            revenue reports.
                         </p>
 
                     </a>
@@ -532,6 +593,22 @@
                         </p>
 
                     </a>
+
+                </div>
+
+                <div class="workflow-box">
+
+                    <h3>
+                        Administration Workflow
+                    </h3>
+
+                    <p>
+                        Manage dentists, assistants and cashiers →
+                        search appointments when required →
+                        review clinic appointment activity →
+                        monitor payments and reports →
+                        review important system activities.
+                    </p>
 
                 </div>
 
