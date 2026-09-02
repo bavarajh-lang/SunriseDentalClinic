@@ -10,7 +10,7 @@ public class DBConnection {
             "jdbc:mysql://localhost:3306/sunrise_dental_clinic"
             + "?useSSL=false"
             + "&allowPublicKeyRetrieval=true"
-            + "&serverTimezone=UTC";
+            + "&serverTimezone=Asia/Colombo";
 
     private static final String USER = "root";
     private static final String PASSWORD = "";
@@ -20,8 +20,13 @@ public class DBConnection {
     private DBConnection() {
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            Class.forName(
+                    "com.mysql.cj.jdbc.Driver"
+            );
+
         } catch (ClassNotFoundException e) {
+
             throw new RuntimeException(
                     "MySQL JDBC Driver not found. Check mysql-connector-j JAR.",
                     e
@@ -32,13 +37,16 @@ public class DBConnection {
     public static DBConnection getInstance() {
 
         if (instance == null) {
-            instance = new DBConnection();
+
+            instance =
+                    new DBConnection();
         }
 
         return instance;
     }
 
-    public Connection getConnection() throws SQLException {
+    public Connection getConnection()
+            throws SQLException {
 
         return DriverManager.getConnection(
                 URL,
