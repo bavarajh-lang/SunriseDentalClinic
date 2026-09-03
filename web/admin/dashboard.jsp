@@ -226,7 +226,7 @@
 
         .actions {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 15px;
         }
 
@@ -278,19 +278,9 @@
             line-height: 1.6;
         }
 
-        @media(max-width: 1200px) {
-
-            .actions {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
         @media(max-width: 1100px) {
 
-            .stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
+            .stats,
             .actions {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -357,23 +347,23 @@
                 Appointment Search
             </a>
 
-            <a href="<%= request.getContextPath() %>/admin/patients.jsp">
+            <a href="<%= request.getContextPath() %>/admin/Patients">
                 Patients
             </a>
 
-            <a href="<%= request.getContextPath() %>/admin/appointments.jsp">
+            <a href="<%= request.getContextPath() %>/admin/Appointments">
                 Appointments
             </a>
 
-            <a href="<%= request.getContextPath() %>/admin/payments.jsp">
+            <a href="<%= request.getContextPath() %>/admin/Payments">
                 Payments
             </a>
 
-            <a href="<%= request.getContextPath() %>/admin/reports.jsp">
+            <a href="<%= request.getContextPath() %>/admin/Reports">
                 Reports
             </a>
 
-            <a href="<%= request.getContextPath() %>/admin/audit-logs.jsp">
+            <a href="<%= request.getContextPath() %>/admin/AuditLogs">
                 Audit Logs
             </a>
 
@@ -410,8 +400,8 @@
                 </h1>
 
                 <p>
-                    Manage clinic users, staff, appointments,
-                    appointment searches and reports.
+                    Manage clinic staff, patients, appointments,
+                    payments, reports and system activities.
                 </p>
 
             </div>
@@ -507,7 +497,7 @@
                         </h3>
 
                         <p>
-                            Add, update or disable dentists.
+                            Add, update or disable clinic dentists.
                         </p>
 
                     </a>
@@ -534,7 +524,7 @@
                         </h3>
 
                         <p>
-                            Add or replace the active cashier.
+                            Add, disable or replace the clinic cashier.
                         </p>
 
                     </a>
@@ -547,14 +537,27 @@
                         </h3>
 
                         <p>
-                            Search by appointment number and
-                            view patient, dentist, service,
-                            schedule and appointment status.
+                            Search an appointment number and
+                            view complete appointment information.
                         </p>
 
                     </a>
 
-                    <a href="<%= request.getContextPath() %>/admin/appointments.jsp"
+                    <a href="<%= request.getContextPath() %>/admin/Patients"
+                       class="action">
+
+                        <h3>
+                            Patients
+                        </h3>
+
+                        <p>
+                            View registered patients,
+                            contact details and appointment activity.
+                        </p>
+
+                    </a>
+
+                    <a href="<%= request.getContextPath() %>/admin/Appointments"
                        class="action">
 
                         <h3>
@@ -562,12 +565,27 @@
                         </h3>
 
                         <p>
-                            View clinic appointment activity.
+                            Search, filter and review all
+                            clinic appointment activity.
                         </p>
 
                     </a>
 
-                    <a href="<%= request.getContextPath() %>/admin/reports.jsp"
+                    <a href="<%= request.getContextPath() %>/admin/Payments"
+                       class="action">
+
+                        <h3>
+                            Payments
+                        </h3>
+
+                        <p>
+                            Review payment transactions,
+                            methods and clinic revenue.
+                        </p>
+
+                    </a>
+
+                    <a href="<%= request.getContextPath() %>/admin/Reports"
                        class="action">
 
                         <h3>
@@ -575,13 +593,13 @@
                         </h3>
 
                         <p>
-                            View clinic performance and
-                            revenue reports.
+                            Generate appointment and
+                            revenue reports by date period.
                         </p>
 
                     </a>
 
-                    <a href="<%= request.getContextPath() %>/admin/audit-logs.jsp"
+                    <a href="<%= request.getContextPath() %>/admin/AuditLogs"
                        class="action">
 
                         <h3>
@@ -589,7 +607,8 @@
                         </h3>
 
                         <p>
-                            Track important system activities.
+                            Review important user and
+                            system activities.
                         </p>
 
                     </a>
@@ -603,11 +622,12 @@
                     </h3>
 
                     <p>
-                        Manage dentists, assistants and cashiers →
-                        search appointments when required →
-                        review clinic appointment activity →
-                        monitor payments and reports →
-                        review important system activities.
+                        Manage clinic staff →
+                        review patients →
+                        search and monitor appointments →
+                        review payment transactions →
+                        generate clinic reports →
+                        inspect important system activities.
                     </p>
 
                 </div>
