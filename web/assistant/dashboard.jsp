@@ -1,5 +1,63 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
+<%
+    if (request.getAttribute("pendingRequests") == null
+            && request.getAttribute("dashboardError") == null) {
+
+        response.sendRedirect(
+                request.getContextPath()
+                + "/assistant/Dashboard"
+        );
+
+        return;
+    }
+
+    Integer pendingRequestsValue =
+            (Integer) request.getAttribute(
+                    "pendingRequests"
+            );
+
+    Integer todayConfirmedValue =
+            (Integer) request.getAttribute(
+                    "todayConfirmed"
+            );
+
+    Integer completedTreatmentsValue =
+            (Integer) request.getAttribute(
+                    "completedTreatments"
+            );
+
+    Integer billsToGenerateValue =
+            (Integer) request.getAttribute(
+                    "billsToGenerate"
+            );
+
+    String dashboardError =
+            (String) request.getAttribute(
+                    "dashboardError"
+            );
+
+    int pendingRequests =
+            pendingRequestsValue != null
+            ? pendingRequestsValue
+            : 0;
+
+    int todayConfirmed =
+            todayConfirmedValue != null
+            ? todayConfirmedValue
+            : 0;
+
+    int completedTreatments =
+            completedTreatmentsValue != null
+            ? completedTreatmentsValue
+            : 0;
+
+    int billsToGenerate =
+            billsToGenerateValue != null
+            ? billsToGenerateValue
+            : 0;
+%>
+
 <!DOCTYPE html>
 <html>
 
@@ -121,6 +179,16 @@
             line-height: 1.6;
         }
 
+        .error-message {
+            background: #fef2f2;
+            border: 1px solid #fca5a5;
+            color: #991b1b;
+            padding: 14px 16px;
+            border-radius: 8px;
+            margin-bottom: 22px;
+            line-height: 1.5;
+        }
+
         .stats {
             display: grid;
             grid-template-columns: repeat(4,1fr);
@@ -133,6 +201,13 @@
             padding: 22px;
             border-radius: 10px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+            border: 1px solid transparent;
+            transition: 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: #d8eaf2;
         }
 
         .card h3 {
@@ -273,7 +348,7 @@
         <nav class="menu">
 
             <a class="active"
-               href="<%= request.getContextPath() %>/assistant/dashboard.jsp">
+               href="<%= request.getContextPath() %>/assistant/Dashboard">
 
                 Dashboard
 
@@ -342,6 +417,26 @@
 
             </div>
 
+            <%
+                if (dashboardError != null) {
+            %>
+
+            <div class="error-message">
+
+                <strong>
+                    Dashboard Error
+                </strong>
+
+                <br>
+
+                <%= dashboardError %>
+
+            </div>
+
+            <%
+                }
+            %>
+
             <div class="stats">
 
                 <div class="card">
@@ -351,11 +446,12 @@
                     </h3>
 
                     <p>
-                        0
+                        <%= pendingRequests %>
                     </p>
 
                     <div class="card-note">
-                        Appointment requests awaiting review.
+                        Appointment requests awaiting review
+                        for your assigned dentist.
                     </div>
 
                 </div>
@@ -367,11 +463,12 @@
                     </h3>
 
                     <p>
-                        0
+                        <%= todayConfirmed %>
                     </p>
 
                     <div class="card-note">
-                        Confirmed appointments scheduled today.
+                        Confirmed appointments scheduled
+                        for your dentist today.
                     </div>
 
                 </div>
@@ -383,11 +480,12 @@
                     </h3>
 
                     <p>
-                        0
+                        <%= completedTreatments %>
                     </p>
 
                     <div class="card-note">
-                        Completed treatment records.
+                        Completed appointments with recorded
+                        treatment information.
                     </div>
 
                 </div>
@@ -399,11 +497,12 @@
                     </h3>
 
                     <p>
-                        0
+                        <%= billsToGenerate %>
                     </p>
 
                     <div class="card-note">
-                        Completed treatments ready for billing.
+                        Completed treatments that do not
+                        yet have a generated bill.
                     </div>
 
                 </div>

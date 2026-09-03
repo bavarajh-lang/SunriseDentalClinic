@@ -152,7 +152,7 @@ public class LoginServlet extends HttpServlet {
 
                 response.sendRedirect(
                         contextPath
-                        + "/assistant/dashboard.jsp"
+                        + "/assistant/Dashboard"
                 );
 
                 break;
