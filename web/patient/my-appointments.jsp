@@ -3,11 +3,26 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%
+    if (request.getAttribute("appointments") == null
+            && request.getAttribute("appointmentListError") == null) {
+
+        response.sendRedirect(
+                request.getContextPath()
+                + "/patient/MyAppointments"
+        );
+
+        return;
+    }
+
     List<Appointment> appointments =
-            (List<Appointment>) request.getAttribute("appointments");
+            (List<Appointment>) request.getAttribute(
+                    "appointments"
+            );
 
     String appointmentListError =
-            (String) request.getAttribute("appointmentListError");
+            (String) request.getAttribute(
+                    "appointmentListError"
+            );
 %>
 
 <!DOCTYPE html>
@@ -33,6 +48,13 @@
             font-family: Arial, sans-serif;
         }
 
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+            overflow-x: hidden;
+        }
+
         body {
             background: #f4f8fb;
             color: #1f2937;
@@ -43,12 +65,9 @@
             min-height: 100vh;
         }
 
-        /* =========================
-           SIDEBAR
-           ========================= */
-
         .sidebar {
             width: 250px;
+            min-width: 250px;
             background: #0f5f87;
             color: white;
             padding: 25px 20px;
@@ -57,6 +76,14 @@
         .logo {
             font-size: 21px;
             font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .role-label {
+            color: #d6edf7;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
             margin-bottom: 35px;
         }
 
@@ -67,16 +94,13 @@
             padding: 12px 14px;
             margin-bottom: 8px;
             border-radius: 6px;
+            transition: 0.2s;
         }
 
         .menu a:hover,
         .menu .active {
             background: rgba(255,255,255,0.18);
         }
-
-        /* =========================
-           MAIN
-           ========================= */
 
         .main {
             flex: 1;
@@ -86,13 +110,10 @@
         .topbar {
             background: white;
             padding: 18px 30px;
-
             display: flex;
             justify-content: space-between;
             align-items: center;
-
-            box-shadow:
-                0 2px 10px rgba(0,0,0,0.06);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
         }
 
         .welcome {
@@ -107,11 +128,8 @@
 
         .content {
             padding: 30px;
+            min-width: 0;
         }
-
-        /* =========================
-           PAGE TITLE
-           ========================= */
 
         .page-header {
             display: flex;
@@ -124,10 +142,12 @@
         .page-title h1 {
             color: #0f5f87;
             margin-bottom: 6px;
+            font-size: 32px;
         }
 
         .page-title p {
             color: #6b7280;
+            line-height: 1.6;
         }
 
         .book-btn {
@@ -144,10 +164,6 @@
             background: #0c5d82;
         }
 
-        /* =========================
-           ERROR
-           ========================= */
-
         .error-message {
             background: #fef2f2;
             border: 1px solid #fca5a5;
@@ -156,10 +172,6 @@
             border-radius: 7px;
             margin-bottom: 20px;
         }
-
-        /* =========================
-           APPOINTMENT CARDS
-           ========================= */
 
         .appointments {
             display: grid;
@@ -170,9 +182,7 @@
             background: white;
             border-radius: 12px;
             padding: 24px;
-
-            box-shadow:
-                0 5px 20px rgba(0,0,0,0.06);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
         }
 
         .appointment-header {
@@ -180,12 +190,9 @@
             justify-content: space-between;
             align-items: flex-start;
             gap: 15px;
-
             padding-bottom: 18px;
             margin-bottom: 20px;
-
-            border-bottom:
-                1px solid #e5e7eb;
+            border-bottom: 1px solid #e5e7eb;
         }
 
         .appointment-number {
@@ -198,10 +205,6 @@
             color: #6b7280;
             font-size: 13px;
         }
-
-        /* =========================
-           STATUS
-           ========================= */
 
         .status {
             display: inline-block;
@@ -236,14 +239,14 @@
             color: #991b1b;
         }
 
-        /* =========================
-           DETAILS
-           ========================= */
+        .status-default {
+            background: #e5e7eb;
+            color: #374151;
+        }
 
         .details-grid {
             display: grid;
-            grid-template-columns:
-                repeat(3, 1fr);
+            grid-template-columns: repeat(3,1fr);
             gap: 20px;
         }
 
@@ -268,10 +271,6 @@
             line-height: 1.5;
         }
 
-        /* =========================
-           PATIENT REASON
-           ========================= */
-
         .reason-box {
             margin-top: 18px;
             background: #f9fafb;
@@ -290,10 +289,6 @@
             line-height: 1.5;
             font-size: 14px;
         }
-
-        /* =========================
-           RESCHEDULE
-           ========================= */
 
         .reschedule-box {
             margin-top: 18px;
@@ -315,18 +310,12 @@
             line-height: 1.5;
         }
 
-        /* =========================
-           EMPTY
-           ========================= */
-
         .empty-state {
             background: white;
             border-radius: 12px;
             text-align: center;
             padding: 55px 25px;
-
-            box-shadow:
-                0 5px 20px rgba(0,0,0,0.06);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
         }
 
         .empty-state h2 {
@@ -349,15 +338,10 @@
             font-weight: bold;
         }
 
-        /* =========================
-           RESPONSIVE
-           ========================= */
-
         @media(max-width: 950px) {
 
             .details-grid {
-                grid-template-columns:
-                    repeat(2, 1fr);
+                grid-template-columns: repeat(2,1fr);
             }
         }
 
@@ -369,6 +353,10 @@
 
             .content {
                 padding: 20px;
+            }
+
+            .topbar {
+                padding: 16px 20px;
             }
 
             .page-header {
@@ -393,20 +381,19 @@
 
 <div class="layout">
 
-
-    <!-- =========================
-         SIDEBAR
-         ========================= -->
-
     <aside class="sidebar">
 
         <div class="logo">
             Sunrise Dental
         </div>
 
+        <div class="role-label">
+            PATIENT
+        </div>
+
         <nav class="menu">
 
-            <a href="<%= request.getContextPath() %>/patient/dashboard.jsp">
+            <a href="<%= request.getContextPath() %>/patient/Dashboard">
                 Dashboard
             </a>
 
@@ -419,35 +406,23 @@
                 My Appointments
             </a>
 
-            <a href="treatment-history.jsp">
+            <a href="<%= request.getContextPath() %>/patient/TreatmentHistory">
                 Treatment History
             </a>
 
-            <a href="my-bills.jsp">
+            <a href="<%= request.getContextPath() %>/patient/MyBills">
                 My Bills
             </a>
 
-            <a href="notifications.jsp">
-                Notifications
-            </a>
-
-            <a href="profile.jsp">
-                My Profile
+            <a href="<%= request.getContextPath() %>/Help">
+                Help
             </a>
 
         </nav>
 
     </aside>
 
-
-    <!-- =========================
-         MAIN
-         ========================= -->
-
     <main class="main">
-
-
-        <!-- TOP BAR -->
 
         <div class="topbar">
 
@@ -467,11 +442,7 @@
 
         </div>
 
-
         <div class="content">
-
-
-            <!-- PAGE HEADER -->
 
             <div class="page-header">
 
@@ -497,16 +468,15 @@
 
             </div>
 
-
-            <!-- ERROR -->
-
             <%
                 if (appointmentListError != null) {
             %>
 
             <div class="error-message">
 
-                <strong>Error:</strong>
+                <strong>
+                    Error:
+                </strong>
 
                 <%= appointmentListError %>
 
@@ -516,11 +486,6 @@
                 }
             %>
 
-
-            <!-- =========================
-                 APPOINTMENTS AVAILABLE
-                 ========================= -->
-
             <%
                 if (appointments != null
                         && !appointments.isEmpty()) {
@@ -528,16 +493,43 @@
 
             <div class="appointments">
 
-
                 <%
                     for (Appointment appointment : appointments) {
+
+                        String status =
+                                appointment.getStatus();
+
+                        String statusClass =
+                                "status-default";
+
+                        if ("PENDING".equals(status)) {
+
+                            statusClass =
+                                    "status-pending";
+
+                        } else if ("CONFIRMED".equals(status)) {
+
+                            statusClass =
+                                    "status-confirmed";
+
+                        } else if ("RESCHEDULE_REQUESTED".equals(status)) {
+
+                            statusClass =
+                                    "status-reschedule";
+
+                        } else if ("COMPLETED".equals(status)) {
+
+                            statusClass =
+                                    "status-completed";
+
+                        } else if ("CANCELLED".equals(status)) {
+
+                            statusClass =
+                                    "status-cancelled";
+                        }
                 %>
 
-
                 <div class="appointment-card">
-
-
-                    <!-- HEADER -->
 
                     <div class="appointment-header">
 
@@ -550,91 +542,22 @@
                             </h2>
 
                             <div class="appointment-subtitle">
-
                                 Sunrise Dental Clinic Appointment
-
                             </div>
 
                         </div>
 
+                        <span class="status <%= statusClass %>">
 
-                        <!-- STATUS -->
+                            <%= status != null
+                                    ? status.replace("_", " ")
+                                    : "UNKNOWN" %>
 
-                        <div>
-
-                            <%
-                                if ("PENDING".equals(
-                                        appointment.getStatus())) {
-                            %>
-
-                            <span class="status status-pending">
-                                PENDING
-                            </span>
-
-
-                            <%
-                                } else if ("CONFIRMED".equals(
-                                        appointment.getStatus())) {
-                            %>
-
-                            <span class="status status-confirmed">
-                                CONFIRMED
-                            </span>
-
-
-                            <%
-                                } else if ("RESCHEDULE_REQUESTED".equals(
-                                        appointment.getStatus())) {
-                            %>
-
-                            <span class="status status-reschedule">
-                                RESCHEDULE REQUESTED
-                            </span>
-
-
-                            <%
-                                } else if ("COMPLETED".equals(
-                                        appointment.getStatus())) {
-                            %>
-
-                            <span class="status status-completed">
-                                COMPLETED
-                            </span>
-
-
-                            <%
-                                } else if ("CANCELLED".equals(
-                                        appointment.getStatus())) {
-                            %>
-
-                            <span class="status status-cancelled">
-                                CANCELLED
-                            </span>
-
-
-                            <%
-                                } else {
-                            %>
-
-                            <span class="status">
-                                <%= appointment.getStatus() %>
-                            </span>
-
-                            <%
-                                }
-                            %>
-
-                        </div>
+                        </span>
 
                     </div>
 
-
-                    <!-- DETAILS -->
-
                     <div class="details-grid">
-
-
-                        <!-- REQUESTED SERVICE -->
 
                         <div class="detail-box">
 
@@ -644,14 +567,13 @@
 
                             <span class="detail-value">
 
-                                <%= appointment.getServiceName() %>
+                                <%= appointment.getServiceName() != null
+                                        ? appointment.getServiceName()
+                                        : "-" %>
 
                             </span>
 
                         </div>
-
-
-                        <!-- DENTIST -->
 
                         <div class="detail-box">
 
@@ -662,14 +584,13 @@
                             <span class="detail-value">
 
                                 Dr.
-                                <%= appointment.getDentistName() %>
+                                <%= appointment.getDentistName() != null
+                                        ? appointment.getDentistName()
+                                        : "-" %>
 
                             </span>
 
                         </div>
-
-
-                        <!-- SPECIALIZATION -->
 
                         <div class="detail-box">
 
@@ -683,21 +604,20 @@
                                     if (appointment
                                             .getDentistSpecialization()
                                             != null
-                                            &&
-                                        !appointment
+                                            && !appointment
                                             .getDentistSpecialization()
                                             .trim()
                                             .isEmpty()) {
                                 %>
 
-                                    <%= appointment
-                                            .getDentistSpecialization() %>
+                                <%= appointment
+                                        .getDentistSpecialization() %>
 
                                 <%
                                     } else {
                                 %>
 
-                                    General Dentistry
+                                General Dentistry
 
                                 <%
                                     }
@@ -707,9 +627,6 @@
 
                         </div>
 
-
-                        <!-- DATE -->
-
                         <div class="detail-box">
 
                             <span class="detail-label">
@@ -718,15 +635,14 @@
 
                             <span class="detail-value">
 
-                                <%= appointment
-                                        .getAppointmentDate() %>
+                                <%= appointment.getAppointmentDate()
+                                        != null
+                                        ? appointment.getAppointmentDate()
+                                        : "-" %>
 
                             </span>
 
                         </div>
-
-
-                        <!-- TIME -->
 
                         <div class="detail-box">
 
@@ -736,15 +652,14 @@
 
                             <span class="detail-value">
 
-                                <%= appointment
-                                        .getAppointmentTime() %>
+                                <%= appointment.getAppointmentTime()
+                                        != null
+                                        ? appointment.getAppointmentTime()
+                                        : "-" %>
 
                             </span>
 
                         </div>
-
-
-                        <!-- STATUS -->
 
                         <div class="detail-box">
 
@@ -754,8 +669,9 @@
 
                             <span class="detail-value">
 
-                                <%= appointment.getStatus()
-                                        .replace("_", " ") %>
+                                <%= status != null
+                                        ? status.replace("_", " ")
+                                        : "-" %>
 
                             </span>
 
@@ -763,13 +679,9 @@
 
                     </div>
 
-
-                    <!-- PATIENT REASON -->
-
                     <%
                         if (appointment.getReason() != null
-                                &&
-                            !appointment.getReason()
+                                && !appointment.getReason()
                                 .trim()
                                 .isEmpty()) {
                     %>
@@ -781,9 +693,7 @@
                         </h4>
 
                         <p>
-
                             <%= appointment.getReason() %>
-
                         </p>
 
                     </div>
@@ -792,24 +702,14 @@
                         }
                     %>
 
-
-                    <!-- =========================
-                         ASSISTANT RESCHEDULE DETAILS
-                         ========================= -->
-
                     <%
                         if (appointment.getSuggestedDate() != null
-                                ||
-                            appointment.getSuggestedTime() != null
-                                ||
-                            (appointment.getAssistantNote() != null
-                                &&
-                             !appointment
-                                 .getAssistantNote()
-                                 .trim()
-                                 .isEmpty())) {
+                                || appointment.getSuggestedTime() != null
+                                || (appointment.getAssistantNote() != null
+                                && !appointment.getAssistantNote()
+                                .trim()
+                                .isEmpty())) {
                     %>
-
 
                     <div class="reschedule-box">
 
@@ -817,10 +717,8 @@
                             Assistant Update
                         </h4>
 
-
                         <%
-                            if (appointment.getSuggestedDate()
-                                    != null) {
+                            if (appointment.getSuggestedDate() != null) {
                         %>
 
                         <p>
@@ -837,10 +735,8 @@
                             }
                         %>
 
-
                         <%
-                            if (appointment.getSuggestedTime()
-                                    != null) {
+                            if (appointment.getSuggestedTime() != null) {
                         %>
 
                         <p>
@@ -857,13 +753,9 @@
                             }
                         %>
 
-
                         <%
-                            if (appointment.getAssistantNote()
-                                    != null
-                                    &&
-                                !appointment
-                                    .getAssistantNote()
+                            if (appointment.getAssistantNote() != null
+                                    && !appointment.getAssistantNote()
                                     .trim()
                                     .isEmpty()) {
                         %>
@@ -882,34 +774,23 @@
                             }
                         %>
 
-
                     </div>
-
 
                     <%
                         }
                     %>
 
-
                 </div>
-
 
                 <%
                     }
                 %>
 
-
             </div>
-
 
             <%
                 } else {
             %>
-
-
-            <!-- =========================
-                 EMPTY STATE
-                 ========================= -->
 
             <div class="empty-state">
 
@@ -929,11 +810,9 @@
 
             </div>
 
-
             <%
                 }
             %>
-
 
         </div>
 

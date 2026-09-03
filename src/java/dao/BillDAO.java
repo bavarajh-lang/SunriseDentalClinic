@@ -8,9 +8,11 @@ import java.math.BigDecimal;
 import java.security.SecureRandom;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Time;
 
 import java.util.ArrayList;
 import java.util.Base64;
@@ -61,10 +63,20 @@ public class BillDAO {
                     "AND a.status = 'COMPLETED' " +
                     "FOR UPDATE";
 
+            int patientId;
             int treatmentRecordId;
 
-            Bill bill =
-                    new Bill();
+            String appointmentNo;
+            String patientNo;
+            String patientName;
+            String dentistName;
+            String dentistSpecialization;
+            String requestedServiceName;
+
+            Date appointmentDate;
+            Time appointmentTime;
+
+            BigDecimal consultationFee;
 
             try (
                 PreparedStatement appointmentStatement =
@@ -90,67 +102,52 @@ public class BillDAO {
                         return null;
                     }
 
-                    bill.setAppointmentId(
-                            resultSet.getInt(
-                                    "appointment_id"
-                            )
-                    );
-
-                    bill.setAppointmentNo(
+                    appointmentNo =
                             resultSet.getString(
                                     "appointment_no"
-                            )
-                    );
+                            );
 
-                    bill.setPatientId(
+                    patientId =
                             resultSet.getInt(
                                     "patient_id"
-                            )
-                    );
+                            );
 
-                    bill.setPatientNo(
+                    patientNo =
                             resultSet.getString(
                                     "patient_no"
-                            )
-                    );
+                            );
 
-                    bill.setPatientName(
+                    patientName =
                             resultSet.getString(
                                     "patient_name"
-                            )
-                    );
+                            );
 
-                    bill.setDentistName(
+                    dentistName =
                             resultSet.getString(
                                     "dentist_name"
-                            )
-                    );
+                            );
 
-                    bill.setDentistSpecialization(
+                    dentistSpecialization =
                             resultSet.getString(
                                     "dentist_specialization"
-                            )
-                    );
+                            );
 
-                    bill.setRequestedServiceName(
+                    requestedServiceName =
                             resultSet.getString(
                                     "requested_service_name"
-                            )
-                    );
+                            );
 
-                    bill.setAppointmentDate(
+                    appointmentDate =
                             resultSet.getDate(
                                     "appointment_date"
-                            )
-                    );
+                            );
 
-                    bill.setAppointmentTime(
+                    appointmentTime =
                             resultSet.getTime(
                                     "appointment_time"
-                            )
-                    );
+                            );
 
-                    BigDecimal consultationFee =
+                    consultationFee =
                             resultSet.getBigDecimal(
                                     "consultation_fee"
                             );
@@ -160,10 +157,6 @@ public class BillDAO {
                         consultationFee =
                                 BigDecimal.ZERO;
                     }
-
-                    bill.setConsultationFee(
-                            consultationFee
-                    );
 
                     treatmentRecordId =
                             resultSet.getInt(
@@ -188,16 +181,16 @@ public class BillDAO {
             List<BillItem> billItems =
                     new ArrayList<>();
 
-            if (bill.getConsultationFee()
+            if (consultationFee
                     .compareTo(BigDecimal.ZERO) > 0) {
 
                 BillItem consultationItem =
                         new BillItem(
                                 "Dentist Consultation Fee",
                                 "Consultation fee for Dr. "
-                                + bill.getDentistName(),
+                                + dentistName,
                                 1,
-                                bill.getConsultationFee()
+                                consultationFee
                         );
 
                 billItems.add(
@@ -282,14 +275,6 @@ public class BillDAO {
                 return null;
             }
 
-            bill.setBillItems(
-                    billItems
-            );
-
-            bill.setDiscount(
-                    BigDecimal.ZERO
-            );
-
             BigDecimal subtotal =
                     BigDecimal.ZERO;
 
@@ -304,25 +289,63 @@ public class BillDAO {
                 }
             }
 
-            bill.setSubtotal(
-                    subtotal
-            );
-
-            bill.setTotalAmount(
-                    subtotal
-            );
-
-            bill.setPaymentStatus(
-                    "UNPAID"
-            );
-
-            bill.setBillNo(
-                    generateBillNumber()
-            );
-
-            bill.setQrToken(
-                    generateSecureQrToken()
-            );
+            Bill bill =
+                    Bill.builder()
+                            .appointmentId(
+                                    appointmentId
+                            )
+                            .appointmentNo(
+                                    appointmentNo
+                            )
+                            .patientId(
+                                    patientId
+                            )
+                            .patientNo(
+                                    patientNo
+                            )
+                            .patientName(
+                                    patientName
+                            )
+                            .dentistName(
+                                    dentistName
+                            )
+                            .dentistSpecialization(
+                                    dentistSpecialization
+                            )
+                            .requestedServiceName(
+                                    requestedServiceName
+                            )
+                            .appointmentDate(
+                                    appointmentDate
+                            )
+                            .appointmentTime(
+                                    appointmentTime
+                            )
+                            .consultationFee(
+                                    consultationFee
+                            )
+                            .billItems(
+                                    billItems
+                            )
+                            .subtotal(
+                                    subtotal
+                            )
+                            .discount(
+                                    BigDecimal.ZERO
+                            )
+                            .totalAmount(
+                                    subtotal
+                            )
+                            .paymentStatus(
+                                    "UNPAID"
+                            )
+                            .billNo(
+                                    generateBillNumber()
+                            )
+                            .qrToken(
+                                    generateSecureQrToken()
+                            )
+                            .build();
 
             String billSql =
                     "INSERT INTO bills " +
@@ -831,130 +854,108 @@ public class BillDAO {
             ResultSet resultSet)
             throws Exception {
 
-        Bill bill =
-                new Bill();
-
-        bill.setBillId(
-                resultSet.getInt(
-                        "bill_id"
+        return Bill.builder()
+                .billId(
+                        resultSet.getInt(
+                                "bill_id"
+                        )
                 )
-        );
-
-        bill.setBillNo(
-                resultSet.getString(
-                        "bill_no"
+                .billNo(
+                        resultSet.getString(
+                                "bill_no"
+                        )
                 )
-        );
-
-        bill.setAppointmentId(
-                resultSet.getInt(
-                        "appointment_id"
+                .appointmentId(
+                        resultSet.getInt(
+                                "appointment_id"
+                        )
                 )
-        );
-
-        bill.setPatientId(
-                resultSet.getInt(
-                        "patient_id"
+                .patientId(
+                        resultSet.getInt(
+                                "patient_id"
+                        )
                 )
-        );
-
-        bill.setSubtotal(
-                resultSet.getBigDecimal(
-                        "subtotal"
+                .subtotal(
+                        resultSet.getBigDecimal(
+                                "subtotal"
+                        )
                 )
-        );
-
-        bill.setDiscount(
-                resultSet.getBigDecimal(
-                        "discount"
+                .discount(
+                        resultSet.getBigDecimal(
+                                "discount"
+                        )
                 )
-        );
-
-        bill.setTotalAmount(
-                resultSet.getBigDecimal(
-                        "total_amount"
+                .totalAmount(
+                        resultSet.getBigDecimal(
+                                "total_amount"
+                        )
                 )
-        );
-
-        bill.setPaymentStatus(
-                resultSet.getString(
-                        "payment_status"
+                .paymentStatus(
+                        resultSet.getString(
+                                "payment_status"
+                        )
                 )
-        );
-
-        bill.setQrToken(
-                resultSet.getString(
-                        "qr_token"
+                .qrToken(
+                        resultSet.getString(
+                                "qr_token"
+                        )
                 )
-        );
-
-        bill.setCreatedAt(
-                resultSet.getTimestamp(
-                        "created_at"
+                .createdAt(
+                        resultSet.getTimestamp(
+                                "created_at"
+                        )
                 )
-        );
-
-        bill.setUpdatedAt(
-                resultSet.getTimestamp(
-                        "updated_at"
+                .updatedAt(
+                        resultSet.getTimestamp(
+                                "updated_at"
+                        )
                 )
-        );
-
-        bill.setAppointmentNo(
-                resultSet.getString(
-                        "appointment_no"
+                .appointmentNo(
+                        resultSet.getString(
+                                "appointment_no"
+                        )
                 )
-        );
-
-        bill.setAppointmentDate(
-                resultSet.getDate(
-                        "appointment_date"
+                .appointmentDate(
+                        resultSet.getDate(
+                                "appointment_date"
+                        )
                 )
-        );
-
-        bill.setAppointmentTime(
-                resultSet.getTime(
-                        "appointment_time"
+                .appointmentTime(
+                        resultSet.getTime(
+                                "appointment_time"
+                        )
                 )
-        );
-
-        bill.setPatientNo(
-                resultSet.getString(
-                        "patient_no"
+                .patientNo(
+                        resultSet.getString(
+                                "patient_no"
+                        )
                 )
-        );
-
-        bill.setPatientName(
-                resultSet.getString(
-                        "patient_name"
+                .patientName(
+                        resultSet.getString(
+                                "patient_name"
+                        )
                 )
-        );
-
-        bill.setDentistName(
-                resultSet.getString(
-                        "dentist_name"
+                .dentistName(
+                        resultSet.getString(
+                                "dentist_name"
+                        )
                 )
-        );
-
-        bill.setDentistSpecialization(
-                resultSet.getString(
-                        "dentist_specialization"
+                .dentistSpecialization(
+                        resultSet.getString(
+                                "dentist_specialization"
+                        )
                 )
-        );
-
-        bill.setConsultationFee(
-                resultSet.getBigDecimal(
-                        "consultation_fee"
+                .consultationFee(
+                        resultSet.getBigDecimal(
+                                "consultation_fee"
+                        )
                 )
-        );
-
-        bill.setRequestedServiceName(
-                resultSet.getString(
-                        "requested_service_name"
+                .requestedServiceName(
+                        resultSet.getString(
+                                "requested_service_name"
+                        )
                 )
-        );
-
-        return bill;
+                .build();
     }
 
 

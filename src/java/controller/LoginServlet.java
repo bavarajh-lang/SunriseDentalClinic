@@ -1,5 +1,6 @@
 package controller;
 
+import dao.AuditLogDAO;
 import dao.UserDAO;
 import model.User;
 
@@ -21,10 +22,14 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String usernameOrEmail =
-                request.getParameter("usernameOrEmail");
+                request.getParameter(
+                        "usernameOrEmail"
+                );
 
         String password =
-                request.getParameter("password");
+                request.getParameter(
+                        "password"
+                );
 
         if (usernameOrEmail == null
                 || usernameOrEmail.trim().isEmpty()
@@ -33,7 +38,7 @@ public class LoginServlet extends HttpServlet {
 
             request.setAttribute(
                     "errorMessage",
-                    "Please enter your username/email and password."
+                    "Please enter your username or email and password."
             );
 
             request.getRequestDispatcher(
@@ -46,133 +51,22 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
-        UserDAO userDAO =
-                new UserDAO();
+        try {
 
-        User user =
-                userDAO.login(
-                        usernameOrEmail.trim(),
-                        password
-                );
+            UserDAO userDAO =
+                    new UserDAO();
 
-        if (user == null) {
+            User user =
+                    userDAO.login(
+                            usernameOrEmail.trim(),
+                            password
+                    );
 
-            request.setAttribute(
-                    "errorMessage",
-                    "Invalid login details or inactive account."
-            );
-
-            request.getRequestDispatcher(
-                    "/login.jsp"
-            ).forward(
-                    request,
-                    response
-            );
-
-            return;
-        }
-
-        if (user.getRole() == null
-                || user.getRole().trim().isEmpty()) {
-
-            request.setAttribute(
-                    "errorMessage",
-                    "Your account role is not available."
-            );
-
-            request.getRequestDispatcher(
-                    "/login.jsp"
-            ).forward(
-                    request,
-                    response
-            );
-
-            return;
-        }
-
-        HttpSession oldSession =
-                request.getSession(false);
-
-        if (oldSession != null) {
-
-            oldSession.invalidate();
-        }
-
-        HttpSession session =
-                request.getSession(true);
-
-        session.setAttribute(
-                "user",
-                user
-        );
-
-        session.setAttribute(
-                "userId",
-                user.getUserId()
-        );
-
-        session.setAttribute(
-                "fullName",
-                user.getFullName()
-        );
-
-        session.setAttribute(
-                "role",
-                user.getRole()
-        );
-
-        session.setMaxInactiveInterval(
-                30 * 60
-        );
-
-        String contextPath =
-                request.getContextPath();
-
-        switch (user.getRole()) {
-
-            case "ADMIN":
-
-                response.sendRedirect(
-                        contextPath
-                        + "/admin/Dashboard"
-                );
-
-                break;
-
-            case "PATIENT":
-
-                response.sendRedirect(
-                        contextPath
-                        + "/patient/dashboard.jsp"
-                );
-
-                break;
-
-            case "ASSISTANT":
-
-                response.sendRedirect(
-                        contextPath
-                        + "/assistant/Dashboard"
-                );
-
-                break;
-
-            case "CASHIER":
-
-                response.sendRedirect(
-                        contextPath
-                        + "/cashier/Dashboard"
-                );
-
-                break;
-
-            default:
-
-                session.invalidate();
+            if (user == null) {
 
                 request.setAttribute(
                         "errorMessage",
-                        "Your account role is not supported."
+                        "Invalid username/email or password."
                 );
 
                 request.getRequestDispatcher(
@@ -182,7 +76,138 @@ public class LoginServlet extends HttpServlet {
                         response
                 );
 
-                break;
+                return;
+            }
+
+            if (user.getStatus() == null
+                    || !"ACTIVE".equalsIgnoreCase(
+                            user.getStatus()
+                    )) {
+
+                request.setAttribute(
+                        "errorMessage",
+                        "Your account is inactive. Please contact the administrator."
+                );
+
+                request.getRequestDispatcher(
+                        "/login.jsp"
+                ).forward(
+                        request,
+                        response
+                );
+
+                return;
+            }
+
+            HttpSession oldSession =
+                    request.getSession(false);
+
+            if (oldSession != null) {
+
+                oldSession.invalidate();
+            }
+
+            HttpSession session =
+                    request.getSession(true);
+
+            session.setAttribute(
+                    "user",
+                    user
+            );
+
+            session.setAttribute(
+                    "userId",
+                    user.getUserId()
+            );
+
+            session.setAttribute(
+                    "fullName",
+                    user.getFullName()
+            );
+
+            session.setAttribute(
+                    "role",
+                    user.getRole()
+            );
+
+            session.setMaxInactiveInterval(
+                    30 * 60
+            );
+
+            AuditLogDAO auditLogDAO =
+                    new AuditLogDAO();
+
+            auditLogDAO.logAction(
+                    user.getUserId(),
+                    "LOGIN",
+                    "User logged in successfully.",
+                    "USER",
+                    (long) user.getUserId()
+            );
+
+            String role =
+                    user.getRole();
+
+            if ("ADMIN".equals(role)) {
+
+                response.sendRedirect(
+                        request.getContextPath()
+                        + "/admin/Dashboard"
+                );
+
+            } else if ("PATIENT".equals(role)) {
+
+                response.sendRedirect(
+                        request.getContextPath()
+                        + "/patient/Dashboard"
+                );
+
+            } else if ("ASSISTANT".equals(role)) {
+
+                response.sendRedirect(
+                        request.getContextPath()
+                        + "/assistant/Dashboard"
+                );
+
+            } else if ("CASHIER".equals(role)) {
+
+                response.sendRedirect(
+                        request.getContextPath()
+                        + "/cashier/Dashboard"
+                );
+
+            } else {
+
+                session.invalidate();
+
+                request.setAttribute(
+                        "errorMessage",
+                        "Invalid user role."
+                );
+
+                request.getRequestDispatcher(
+                        "/login.jsp"
+                ).forward(
+                        request,
+                        response
+                );
+            }
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            request.setAttribute(
+                    "errorMessage",
+                    "Unable to login at this time. Please try again."
+            );
+
+            request.getRequestDispatcher(
+                    "/login.jsp"
+            ).forward(
+                    request,
+                    response
+            );
         }
     }
 }

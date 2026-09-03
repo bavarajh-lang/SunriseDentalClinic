@@ -13,29 +13,19 @@
     }
 
     Integer pendingRequestsValue =
-            (Integer) request.getAttribute(
-                    "pendingRequests"
-            );
+            (Integer) request.getAttribute("pendingRequests");
 
     Integer todayConfirmedValue =
-            (Integer) request.getAttribute(
-                    "todayConfirmed"
-            );
+            (Integer) request.getAttribute("todayConfirmed");
 
     Integer completedTreatmentsValue =
-            (Integer) request.getAttribute(
-                    "completedTreatments"
-            );
+            (Integer) request.getAttribute("completedTreatments");
 
     Integer billsToGenerateValue =
-            (Integer) request.getAttribute(
-                    "billsToGenerate"
-            );
+            (Integer) request.getAttribute("billsToGenerate");
 
     String dashboardError =
-            (String) request.getAttribute(
-                    "dashboardError"
-            );
+            (String) request.getAttribute("dashboardError");
 
     int pendingRequests =
             pendingRequestsValue != null
@@ -349,33 +339,27 @@
 
             <a class="active"
                href="<%= request.getContextPath() %>/assistant/Dashboard">
-
                 Dashboard
-
             </a>
 
             <a href="<%= request.getContextPath() %>/assistant/PendingAppointments">
-
                 Pending Appointments
-
             </a>
 
             <a href="<%= request.getContextPath() %>/assistant/ConfirmedAppointments">
-
                 Confirmed Appointments
-
             </a>
 
             <a href="<%= request.getContextPath() %>/assistant/TreatmentRecords">
-
                 Treatment Records
-
             </a>
 
             <a href="<%= request.getContextPath() %>/AppointmentSearch">
-
                 Appointment Search
+            </a>
 
+            <a href="<%= request.getContextPath() %>/Help">
+                Help
             </a>
 
         </nav>

@@ -367,6 +367,10 @@
                 Audit Logs
             </a>
 
+            <a href="<%= request.getContextPath() %>/Help">
+                Help
+            </a>
+
         </nav>
 
     </aside>

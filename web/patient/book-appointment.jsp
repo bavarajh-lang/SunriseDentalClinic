@@ -19,6 +19,7 @@
 
 <!DOCTYPE html>
 <html>
+
 <head>
 
     <meta charset="UTF-8">
@@ -39,6 +40,13 @@
             font-family: Arial, sans-serif;
         }
 
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+            overflow-x: hidden;
+        }
+
         body {
             background: #f4f8fb;
             color: #1f2937;
@@ -49,12 +57,9 @@
             min-height: 100vh;
         }
 
-        /* ==============================
-           Sidebar
-           ============================== */
-
         .sidebar {
             width: 250px;
+            min-width: 250px;
             background: #0f5f87;
             color: white;
             padding: 25px 20px;
@@ -63,6 +68,14 @@
         .logo {
             font-size: 21px;
             font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .role-label {
+            color: #d6edf7;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
             margin-bottom: 35px;
         }
 
@@ -73,6 +86,7 @@
             padding: 12px 14px;
             margin-bottom: 8px;
             border-radius: 6px;
+            transition: 0.2s;
         }
 
         .menu a:hover,
@@ -80,24 +94,22 @@
             background: rgba(255,255,255,0.18);
         }
 
-        /* ==============================
-           Main Layout
-           ============================== */
-
         .main {
             flex: 1;
+            min-width: 0;
         }
 
         .topbar {
             background: white;
             padding: 18px 30px;
-
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        }
 
-            box-shadow:
-                0 2px 10px rgba(0,0,0,0.06);
+        .welcome {
+            font-weight: bold;
         }
 
         .logout {
@@ -108,11 +120,8 @@
 
         .content {
             padding: 30px;
+            min-width: 0;
         }
-
-        /* ==============================
-           Page Heading
-           ============================== */
 
         .page-title {
             margin-bottom: 25px;
@@ -120,202 +129,127 @@
 
         .page-title h1 {
             color: #0f5f87;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
+            font-size: 32px;
         }
 
         .page-title p {
             color: #6b7280;
+            line-height: 1.6;
         }
 
-        /* ==============================
-           Form
-           ============================== */
-
         .form-card {
-
             background: white;
-
             padding: 30px;
-
             border-radius: 12px;
-
-            box-shadow:
-                0 5px 20px rgba(0,0,0,0.06);
-
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
             max-width: 850px;
         }
 
         .form-grid {
-
             display: grid;
-
-            grid-template-columns:
-                1fr 1fr;
-
+            grid-template-columns: 1fr 1fr;
             gap: 20px;
         }
 
         .form-group {
-
             display: flex;
-
             flex-direction: column;
         }
 
         .form-group.full {
-
             grid-column: 1 / -1;
         }
 
         label {
-
             font-weight: bold;
-
             font-size: 14px;
-
             margin-bottom: 7px;
-
             color: #374151;
         }
 
         input,
         select,
         textarea {
-
             padding: 12px;
-
-            border:
-                1px solid #d1d5db;
-
+            border: 1px solid #d1d5db;
             border-radius: 7px;
-
             font-size: 14px;
-
             outline: none;
-
             background: white;
         }
 
         input:focus,
         select:focus,
         textarea:focus {
-
             border-color: #0f6f9c;
+            box-shadow: 0 0 0 3px rgba(15,111,156,0.08);
         }
 
         textarea {
-
             resize: vertical;
-
             min-height: 100px;
         }
 
-        /* ==============================
-           Submit Button
-           ============================== */
-
         .submit-btn {
-
             margin-top: 25px;
-
             background: #0f6f9c;
-
             color: white;
-
             border: none;
-
             padding: 13px 22px;
-
             border-radius: 7px;
-
             font-size: 15px;
-
             font-weight: bold;
-
             cursor: pointer;
         }
 
         .submit-btn:hover {
-
             background: #0c5d82;
         }
 
-        /* ==============================
-           Information Box
-           ============================== */
-
         .info-box {
-
             background: #eef7fb;
-
-            border-left:
-                4px solid #0f6f9c;
-
+            border-left: 4px solid #0f6f9c;
             padding: 15px;
-
             margin-bottom: 22px;
-
             border-radius: 6px;
-
             color: #4b5563;
-
             font-size: 14px;
-
-            line-height: 1.5;
+            line-height: 1.6;
         }
-
-        /* ==============================
-           Success Message
-           ============================== */
 
         .success-message {
-
             background: #ecfdf3;
-
-            border:
-                1px solid #86efac;
-
+            border: 1px solid #86efac;
             color: #166534;
-
             padding: 14px 16px;
-
             border-radius: 7px;
-
             margin-bottom: 20px;
-
             line-height: 1.5;
         }
-
-        /* ==============================
-           Error Message
-           ============================== */
 
         .error-message {
-
             background: #fef2f2;
-
-            border:
-                1px solid #fca5a5;
-
+            border: 1px solid #fca5a5;
             color: #991b1b;
-
             padding: 14px 16px;
-
             border-radius: 7px;
-
             margin-bottom: 20px;
-
             line-height: 1.5;
         }
-
-        /* ==============================
-           Responsive
-           ============================== */
 
         @media(max-width: 700px) {
 
             .sidebar {
                 display: none;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .topbar {
+                padding: 16px 20px;
             }
 
             .form-grid {
@@ -335,72 +269,57 @@
 
 <div class="layout">
 
-
-    <!-- ==============================
-         SIDEBAR
-         ============================== -->
-
     <aside class="sidebar">
 
         <div class="logo">
             Sunrise Dental
         </div>
 
+        <div class="role-label">
+            PATIENT
+        </div>
+
         <nav class="menu">
 
-            <a href="dashboard.jsp">
+            <a href="<%= request.getContextPath() %>/patient/Dashboard">
                 Dashboard
             </a>
 
             <a href="<%= request.getContextPath() %>/BookAppointment"
                class="active">
-
                 Book Appointment
-
             </a>
 
-<a href="<%= request.getContextPath() %>/patient/MyAppointments">
-    My Appointments
-</a>
+            <a href="<%= request.getContextPath() %>/patient/MyAppointments">
+                My Appointments
+            </a>
 
-            <a href="treatment-history.jsp">
+            <a href="<%= request.getContextPath() %>/patient/TreatmentHistory">
                 Treatment History
             </a>
 
-            <a href="my-bills.jsp">
+            <a href="<%= request.getContextPath() %>/patient/MyBills">
                 My Bills
             </a>
 
-            <a href="notifications.jsp">
-                Notifications
-            </a>
-
-            <a href="profile.jsp">
-                My Profile
+            <a href="<%= request.getContextPath() %>/Help">
+                Help
             </a>
 
         </nav>
 
     </aside>
 
-
-    <!-- ==============================
-         MAIN CONTENT
-         ============================== -->
-
     <main class="main">
-
-
-        <!-- Top Bar -->
 
         <div class="topbar">
 
-            <strong>
+            <div class="welcome">
 
                 Welcome,
                 <%= session.getAttribute("fullName") %>
 
-            </strong>
+            </div>
 
             <a href="<%= request.getContextPath() %>/LogoutServlet"
                class="logout">
@@ -411,11 +330,7 @@
 
         </div>
 
-
         <div class="content">
-
-
-            <!-- Page Title -->
 
             <div class="page-title">
 
@@ -424,21 +339,13 @@
                 </h1>
 
                 <p>
-
                     Choose your preferred dental service,
                     dentist, date and time.
-
                 </p>
 
             </div>
 
-
-            <!-- Appointment Form -->
-
             <div class="form-card">
-
-
-                <!-- Information -->
 
                 <div class="info-box">
 
@@ -449,14 +356,9 @@
                     </strong>.
 
                     The dentist assistant will check availability
-                    and confirm or suggest another time.
+                    and confirm or suggest another date and time.
 
                 </div>
-
-
-                <!-- ==============================
-                     SUCCESS MESSAGE
-                     ============================== -->
 
                 <%
                     if (appointmentSuccess != null) {
@@ -481,11 +383,6 @@
                     }
                 %>
 
-
-                <!-- ==============================
-                     ERROR MESSAGE
-                     ============================== -->
-
                 <%
                     if (appointmentError != null) {
                 %>
@@ -509,22 +406,11 @@
                     }
                 %>
 
-
-                <!-- ==============================
-                     FORM
-                     ============================== -->
-
                 <form
                     action="<%= request.getContextPath() %>/BookAppointmentServlet"
                     method="post">
 
-
                     <div class="form-grid">
-
-
-                        <!-- ==============================
-                             Dental Service
-                             ============================== -->
 
                         <div class="form-group">
 
@@ -537,20 +423,17 @@
                                 required>
 
                                 <option value="">
-
                                     Select Service
-
                                 </option>
-
 
                                 <%
                                     if (services != null) {
 
-                                        for (DentalService service : services) {
+                                        for (DentalService service
+                                                : services) {
                                 %>
 
-                                <option
-                                    value="<%= service.getServiceId() %>">
+                                <option value="<%= service.getServiceId() %>">
 
                                     <%= service.getServiceName() %>
 
@@ -573,11 +456,6 @@
 
                         </div>
 
-
-                        <!-- ==============================
-                             Dentist
-                             ============================== -->
-
                         <div class="form-group">
 
                             <label>
@@ -589,39 +467,31 @@
                                 required>
 
                                 <option value="">
-
                                     Select Dentist
-
                                 </option>
-
 
                                 <%
                                     if (dentists != null) {
 
-                                        for (Dentist dentist : dentists) {
+                                        for (Dentist dentist
+                                                : dentists) {
                                 %>
 
-                                <option
-                                    value="<%= dentist.getDentistId() %>">
+                                <option value="<%= dentist.getDentistId() %>">
 
                                     Dr.
                                     <%= dentist.getFullName() %>
 
-
                                     <%
-                                        if (
-                                            dentist.getSpecialization()
-                                                    != null
-                                            &&
-                                            !dentist
+                                        if (dentist.getSpecialization()
+                                                != null
+                                                && !dentist
                                                 .getSpecialization()
                                                 .trim()
-                                                .isEmpty()
-                                        ) {
+                                                .isEmpty()) {
                                     %>
 
                                     -
-
                                     <%= dentist.getSpecialization() %>
 
                                     <%
@@ -639,11 +509,6 @@
 
                         </div>
 
-
-                        <!-- ==============================
-                             Appointment Date
-                             ============================== -->
-
                         <div class="form-group">
 
                             <label>
@@ -657,11 +522,6 @@
 
                         </div>
 
-
-                        <!-- ==============================
-                             Appointment Time
-                             ============================== -->
-
                         <div class="form-group">
 
                             <label>
@@ -674,11 +534,6 @@
                                 required>
 
                         </div>
-
-
-                        <!-- ==============================
-                             Reason
-                             ============================== -->
 
                         <div class="form-group full">
 
@@ -694,9 +549,6 @@
                         </div>
 
                     </div>
-
-
-                    <!-- Submit -->
 
                     <button
                         type="submit"
@@ -717,4 +569,5 @@
 </div>
 
 </body>
+
 </html>

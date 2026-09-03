@@ -50,7 +50,7 @@ public class CashierDashboardDAO {
         String sql =
                 "SELECT COUNT(*) AS total " +
                 "FROM payments " +
-                "WHERE status = 'SUCCESS' " +
+                "WHERE payment_status = 'SUCCESS' " +
                 "AND DATE(paid_at) = CURRENT_DATE";
 
         try (
@@ -86,7 +86,7 @@ public class CashierDashboardDAO {
         String sql =
                 "SELECT COALESCE(SUM(amount), 0) AS total " +
                 "FROM payments " +
-                "WHERE status = 'SUCCESS' " +
+                "WHERE payment_status = 'SUCCESS' " +
                 "AND DATE(paid_at) = CURRENT_DATE";
 
         try (

@@ -100,6 +100,14 @@
         .logo {
             font-size: 22px;
             font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .role-label {
+            color: #d6edf7;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
             margin-bottom: 35px;
         }
 
@@ -324,6 +332,10 @@
             Sunrise Dental
         </div>
 
+        <div class="role-label">
+            CASHIER
+        </div>
+
         <nav class="menu">
 
             <a class="active"
@@ -345,6 +357,10 @@
 
             <a href="<%= request.getContextPath() %>/AppointmentSearch">
                 Appointment Search
+            </a>
+
+            <a href="<%= request.getContextPath() %>/Help">
+                Help
             </a>
 
         </nav>
